@@ -1,38 +1,38 @@
-class AlbumItem extends HTMLElement {
+class AlbumItem extends BaseComponent {
 
-  constructor() {
-    super();
-    this.render({
+  static tagName = 'album-item';
+
+  beforeMount() {
+    this.data = {
       cover: this.getAttribute('cover').replace('/media/ander/music', '/music'),
       title: this.getAttribute('title'),
-      artist: this.getAttribute('artist')
-    });
+      artist: this.getAttribute('artist'),
+      id: this.getAttribute('album-id'),
+    };
   }
 
-  render(data) {
+  get html() {
 
-    const { cover, title, artist } = data;
+    const { cover, title, artist, id } = this.data;
 
-    const template = `
+    return `
 
-      <div class="playlist__current">
-        <img class="playlist__current__cover" src="${cover}">
+      <div class="album-info" data-mosic-link data-target="/album/${id}">
+        <a class="album-info__cover" href="/album/${id}">
+          <img src="${cover}">
+        </a>
 
-        <p class="playlist__current__name">
+        <p class="album-info__name">
           <span id="album-title">${title}</span>
         </p>
-        <p class="playlist__current__group">
+        <p class="album-info__group">
           <span id="album-group">${artist}</span>
-          <!-- <svg class="icon"><use xlink:href="#icon-users"></use></svg> -->
         </p>
       </div>
 
     `;
 
-    this.innerHTML = template;
-
   }
 
 }
-
-customElements.define('album-item', AlbumItem);
+export default AlbumItem;

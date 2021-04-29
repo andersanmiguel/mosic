@@ -1,7 +1,11 @@
-class AlbumList extends HTMLElement {
+import BaseComponent from '/js/base-component.js';
+class AlbumList extends BaseComponent {
 
-  constructor() {
-    super();
+  static tagName = 'album-list';
+  components = ['/js/album-item.js'];
+  noRender = true;
+
+  beforeMount() {
     this.data = [];
     this.filter = '';
     this.queryString = { query: `
@@ -13,77 +17,66 @@ class AlbumList extends HTMLElement {
           artist {
             name
           }
-          songs {
-            title
-          }
         }
       }
     `
     };
-
-    this.init();
-
   }
 
-  async init() {
-    this.data = await this.getAlbumList();
+  async mounted() {
+    this.data = await this.apiRequest();
     this.render();
-    this.renderList();
-  }
 
-  async getAlbumList() {
-    const response = await fetch('http://192.168.1.37:8888/graphql', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(this.queryString)
-    });
+    this.listContainer = this.querySelector('.album-grid-list');
+    this.render(this.listHtml, this.listContainer);
 
-    return response.json();
+    this.filterTrigger = this.querySelector('.big-box');
+    this.addBindings();
   }
 
   addBindings() {
-    var filterTrigger = document.querySelector('.big-box');
     let debounceTrigger;
-    filterTrigger.addEventListener('keydown', e => {
+    this.filterTrigger.addEventListener('keydown', e => {
       if (debounceTrigger) {
         window.clearInterval(debounceTrigger);
       }
 
       debounceTrigger = window.setTimeout(_ => {
         this.filter = e.target.value.toLowerCase();
-        this.renderList();
+        this.render(this.listHtml, this.listContainer);
       }, 500);
     });
   }
 
-  render() {
+  destroyed() {
+    this.filterTrigger.removeEventListener('keydown');
+  }
 
-    const template = `
+  get html() {
+
+    return `
       <input type="text" class="big-box" value="${this.filter}" name="filter" placeholder="Search..." autofocus="autofocus">
-      <div class="playlist">
+      <div class="album-grid-list">
       </div>
     `;
 
-    this.innerHTML = template;
-    this.addBindings();
   }
 
-  renderList() {
-    const albums = this.data.data.albums.map(item => {
-      if (this.filter && !item.title.toLowerCase().includes(this.filter)) {
+  get listHtml() {
+    if (!this.data) {
+      return;
+    }
+    return this.data.data.albums.map(item => {
+      if (this.filter && (!item.title.toLowerCase().includes(this.filter) && !item.artist.name.toLowerCase().includes(this.filter))) {
         return;
       }
       return `
-        <album-item cover="${item.cover}" artist="${item.artist.name}" title="${item.title}"></album-item>
+        <album-item cover="${item.cover}" artist="${item.artist.name}" title="${item.title}" album-id="${item.id}"></album-item>
       `;
     }).join(''); 
-
-    this.querySelector('.playlist').innerHTML = albums;
 
   }
 
 }
 
-customElements.define('album-list', AlbumList);
+export default AlbumList;

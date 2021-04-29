@@ -1,11 +1,20 @@
 let routes = [
 
   {
+    name: 'not-found',
+    path: '',
+    regex: false,
+    template: () => {
+      return `<not-found></not-found>`;
+    }
+  },
+
+  {
     name: 'index',
     path: '/',
     regex: /^\/$/,
-    template: (args) => {
-      return `<album-full id="${args.id}"></album-full>`;
+    template: _ => {
+      return `<album-list></album-list>`;
     }
   },
   {
@@ -19,7 +28,7 @@ let routes = [
   {
     name: 'album',
     path: '/album/:id',
-    regex: /^\/album\/(.*)\/?$/,
+    regex: /^\/album\/(.*)$/,
     template: (args) => {
       return `<album-full id="${args.id}"></album-full>`;
     }
@@ -34,19 +43,37 @@ class Router {
   }
 
   on(path) {
-    const route = routes.find(route => {
+    const route = this.routes.find(route => {
+      if (!route.regex) {
+        return false;
+      }
       return route.regex.test(path);
     });
 
     if (!route) {
-      return 404;
+      console.error('Route not found:', path);
+      return this.routes.find(item => item.name === 'not-found');
     }
 
-    const vars = path.matchAll(new RegExp(route.regex, 'g'));
-    console.log(...vars);
+    const vars = Array.from(path.matchAll(new RegExp(route.regex, 'g')))[0];
 
-    return { ...route, vars };
+    this.route = { ...route, vars };
 
+    return this;
+  }
+
+  getTemplate() {
+    if (!this.route.path) {
+      return this.route.template();
+    }
+    const vars = Array.from(this.route.path.matchAll(new RegExp(this.route.regex, 'g')))[0];
+    const result = {};
+    vars.forEach((val, i) => {
+      if (val.indexOf(':') === 0) {
+        result[val.slice(1)] = this.route.vars[i];
+      }
+    });
+    return this.route.template(result);
   }
 
 }
@@ -61,20 +88,43 @@ class MosicRouter extends HTMLElement {
     this.setBindings();
   }
 
-  setBindings() {
-    this.addEventListener('click', e => {
-      if ('mosic-link' in e.currentTarget.dataset === false) {
-        return;
-      }
-      const target = e.currentTarget.dataset.target;
-      if (!target) {
-        return;
-      }
+  goTo(target, replace) {
+    if (!target) {
+      return;
+    }
 
-                  
+    const route = router.on(target);
+    if (replace) {
+      history.replaceState({}, route.name, target);
+    } else {
+      history.pushState({}, route.name, target);
+    }
+    this.innerHTML = router.getTemplate();
+  }
+
+  setBindings() {
+
+    document.addEventListener('click', e => {
+      if ('mosicLink' in e.target.dataset === false) {
+        return;
+      }
+      e.preventDefault();
+      const target = e.target.dataset.target;
+
+      this.goTo(target);
     });
+
+    window.addEventListener('popstate', e => {
+      e.preventDefault();
+      this.goTo(window.location.pathname, true);
+    });
+
+    this.goTo(window.location.pathname);
+
   }
 
 }
 
-customElements.define('mosic-router', MosicRouter);
+export default MosicRouter;
+
+

@@ -15,18 +15,23 @@
 
 
     <h1>
-      Mosic
+      <a href="/" data-mosic-link data-target="/">Mosic</a>
     </h1>
 
-    <mosic-router>
-      <album-list></album-list>
-    </mosic-router>
+    <mosic-router></mosic-router>
 
+    <script type="module">
+      import BaseComponent from '/js/base-component.js';
+      window.BaseComponent = BaseComponent;
+      
+      import MosicRouter from '/js/router.js';
+      customElements.define('mosic-router', MosicRouter);
 
-    <script src="/js/album-item.js"></script>
-    <script src="/js/album-list.js"></script>
-    <script src="/js/router.js"></script>
-    <script src="/js/test.js"></script>
+      import AlbumList from '/js/album-list.js';
+      import AlbumFull from '/js/album-full.js';
+      customElements.define('album-list', AlbumList);
+      customElements.define('album-full', AlbumFull);
+    </script>
 
   </body>
 </html>
