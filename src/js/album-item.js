@@ -3,7 +3,7 @@ class AlbumItem extends BaseComponent {
   static tagName = 'album-item';
 
   beforeMount() {
-    this.data = {
+    this.d = {
       cover: this.getAttribute('cover').replace('/media/ander/music', '/music'),
       title: this.getAttribute('title'),
       artist: this.getAttribute('artist'),
@@ -13,13 +13,13 @@ class AlbumItem extends BaseComponent {
 
   get html() {
 
-    const { cover, title, artist, id } = this.data;
+    const { cover, title, artist, id } = this.d;
 
     return `
 
       <div class="album-info" data-mosic-link data-target="/album/${id}">
         <a class="album-info__cover" href="/album/${id}">
-          <img src="${cover}">
+          <img loading="lazy" width="80" height="80" src="${cover}">
         </a>
 
         <p class="album-info__name">

@@ -1,13 +1,12 @@
 import BaseComponent from '/js/base-component.js';
-class AlbumList extends BaseComponent {
+class MosicFrontpage extends BaseComponent {
 
-  static tagName = 'album-list';
-  components = ['/js/album-item.js'];
+  static tagName = 'mosic-frontpage';
+  components = ['/js/album-list.js'];
   noRender = true;
 
   beforeMount() {
     this.d = [];
-    this.filter = '';
     this.queryString = { query: `
       {
         albums (order: "id") {
@@ -25,10 +24,8 @@ class AlbumList extends BaseComponent {
 
   async mounted() {
     this.d = await this.apiRequest();
+    this.filter = '';
     this.render();
-
-    this.listContainer = this.querySelector('.album-grid-list');
-    this.render(this.listHtml, this.listContainer);
 
     this.filterTrigger = this.querySelector('.big-box');
     this.addBindings();
@@ -43,7 +40,6 @@ class AlbumList extends BaseComponent {
 
       debounceTrigger = window.setTimeout(_ => {
         this.filter = e.target.value.toLowerCase();
-        this.render(this.listHtml, this.listContainer);
       }, 500);
     });
   }
@@ -52,12 +48,37 @@ class AlbumList extends BaseComponent {
     this.filterTrigger.removeEventListener('keydown');
   }
 
+  get filter() {
+    return this._filter;
+  }
+  set filter(val) {
+    this._filter = val;        
+    if (!this.d.data) {
+      return;
+    }
+    this.d.albums = this.d.data.albums.map(item => {
+      if (
+        val &&
+        (!item.title.toLowerCase().includes(val) &&
+        !item.artist.name.toLowerCase().includes(val))
+      ) {
+        return;
+      }
+
+      return {
+        cover: item.cover,
+        name: item.artist.name,
+        title: item.title
+      };
+
+    });
+  }
+
   get html() {
 
     return `
       <input type="text" class="big-box" value="${this.filter}" name="filter" placeholder="Search..." autofocus="autofocus">
-      <div class="album-grid-list">
-      </div>
+      <album-list bind bind-albums="albums"></album-list>
     `;
 
   }
@@ -80,17 +101,9 @@ class AlbumList extends BaseComponent {
     }
     */
 
-    return this.d.data.albums.map(item => {
-      if (this.filter && (!item.title.toLowerCase().includes(this.filter) && !item.artist.name.toLowerCase().includes(this.filter))) {
-        return;
-      }
-      return `
-        <album-item cover="${item.cover}" artist="${item.artist.name}" title="${item.title}" album-id="${item.id}"></album-item>
-      `;
-    }).join('');
 
   }
 
 }
 
-export default AlbumList;
+export default MosicFrontpage;

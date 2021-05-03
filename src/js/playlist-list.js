@@ -4,7 +4,7 @@ class PlaylistList extends BaseComponent {
   properties = ['song-id'];
 
   beforeMount() {
-    this.data = [];
+    this.d = [];
 
     this.queryString = { query: `
       {
@@ -24,7 +24,7 @@ class PlaylistList extends BaseComponent {
 
   async createTree() {
     const data = await this.apiRequest();
-    this.data = data.data.playlists;
+    this.d = data.data.playlists;
     this.render(this.listHtml, this.listContainer);
   }
 
@@ -81,7 +81,7 @@ class PlaylistList extends BaseComponent {
 
   get listHtml() {
     return `
-      ${ this.data.map(playlist => {
+      ${ this.d.map(playlist => {
         return `<span class="playlist-item group-events" data-id="${ playlist.id }">${ playlist.name }</span>`
       }).join('') }
     `;

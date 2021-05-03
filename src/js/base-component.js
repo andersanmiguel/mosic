@@ -12,17 +12,29 @@ class BaseComponent extends HTMLElement {
     super();
     this.$evt = eventBus;
     this.beforeMount();
-  }
+    /*
+    const handlerData = {
 
-  loadComponents() {
-    if (!this.components) {
-      return;
-    }
-    this.components.forEach(this.importElement);
+      _this: this,
+
+      set(obj, prop, value) {
+        obj[prop] = value;
+        // this._this.render();
+        return true;
+      },
+
+      get(obj, prop) {
+        return obj[prop]; 
+      }
+
+    };
+
+    this.data = new Proxy({}, handlerData);
+    */
   }
 
   static get observedAttributes() {
-    return this.properties || [];
+    return this.properties;
   }
 
   connectedCallback() {
@@ -31,6 +43,7 @@ class BaseComponent extends HTMLElement {
     if (!this.noRender) {
       this.render();
     }
+
     this.mounted();
   }
 
@@ -39,10 +52,16 @@ class BaseComponent extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    // console.log(name, oldValue, newValue);
-    if (oldValue !== newValue && oldValue !== null) {
+    if (oldValue !== newValue) {
       this.render();
     }
+  }
+
+  loadComponents() {
+    if (!this.components) {
+      return;
+    }
+    this.components.forEach(this.importElement);
   }
 
   async importElement(path) {
@@ -87,11 +106,53 @@ class BaseComponent extends HTMLElement {
     return;
   }
 
+  bindAttrs() {
+    const $el = this.querySelector('[bind]');
+    if (!$el?.attributes) {
+      return;
+    }
+
+    const attrs = [];
+
+    for (let i = 0; i < $el.attributes.length; i++) {
+      const name = $el.attributes[i].nodeName;
+      const val = $el.attributes[i].value;
+
+      if (!name.startsWith('bind') || name === 'bind') {
+        continue;
+      }
+      attrs.push( { name, val } );
+    }
+
+    attrs.forEach(attr => {
+      const val = this.d[attr.val] || attr.val;
+      const attrValue = typeof val != 'string' ? JSON.stringify(val) : val;
+      $el.setAttribute(attr.name.replace('bind-', ''), attrValue);
+    });
+
+  }
+
   render(html, el) {
     const htmlString = html || this.html;
     const container = el || this;
     const frag = document.createRange().createContextualFragment(htmlString);
     container.replaceChildren(frag);
+
+    this.bindAttrs();
+
+    /*
+    var xpath = '//*[@*[starts-with(name(), "bind-")]]';
+    var result = document.evaluate(xpath, this, null, XPathResult.ANY_TYPE, null);
+    var node = {};
+    this.nodes = new Set();
+    while(node = result.iterateNext()) {
+      this.nodes.add(node);
+    }
+
+    for (let item of this.nodes) {
+      // console.log('item', this, item);
+    }
+    */
   }
 
 }
