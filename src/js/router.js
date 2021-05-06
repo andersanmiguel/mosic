@@ -33,6 +33,25 @@ let routes = [
       return `<album-full id="${args.id}"></album-full>`;
     }
   },
+  {
+    name: 'playlist',
+    path: '/playlist/:id',
+    regex: /^\/playlist\/(.*)$/,
+    template: (args) => {
+      return `<playlist-view id="${args.id}"></playlist-view>`;
+    }
+  },
+  {
+    name: 'test',
+    path: '/test',
+    regex: /^\/test\/?$/,
+    template: _ => {
+      return `
+        <test-test></test-test>
+        <mosic-player src="${ '/media/ander/music/La Maravillosa Orquesta del Alcohol/Todavia no ha salido la luna/1932.mp3' }"></mosic-player>
+      `;
+    }
+  },
 
 ];
 
@@ -109,7 +128,7 @@ class MosicRouter extends HTMLElement {
         return;
       }
       e.preventDefault();
-      const target = e.target.dataset.target;
+      const target = e.target.dataset.target || e.target.pathname;
 
       this.goTo(target);
     });

@@ -14,11 +14,21 @@ body {
   margin: auto;
 }
 
+header {
+  display: flex;
+  align-items: flex-end;
+  padding: 0 1.5em;
+}
+
+header > mosic-player {
+  margin-left: auto;
+  width: 60%;
+}
+
 h1 {
   color: var(--nord0);
-  padding: 0 .5em;
   margin-bottom: 0;
-  text-align: center;
+  /* text-align: center; */
 }
 
 h1 > a {
@@ -48,6 +58,7 @@ h3 {
   height: var(--size);
   stroke-width: 0;
   fill: var(--color);
+  vertical-align: middle;
 }
 
 .icon-big {
@@ -82,99 +93,21 @@ h3 {
 }
 
 
-/* PLAYER */
-
-.player {
-  max-width: 400px;
-  width: 100%;
-  margin: 1em auto;
-  margin-top: 0;
-  padding: 1em;
-  /* background: var(--nord6); */
-  border-radius: 6px;
-}
-
-.player__cover {
-  text-align: center;
-  margin-bottom: 1em;
-}
-.player__cover img {
-  max-width: 90%;
-  height: auto;
-  border-radius: 3px;
-  /* box-shadow: 1px 1px 3px var(--nord3); */
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-}
-
-.player__info {
-  margin-bottom: 2em;
-}
-.player__info p {
-  margin: 0;
-}
-.player__info__name {
-  font-size: 1.2em;
-}
-.player__info__group {
-  color: var(--nord3);  
-}
-
-.player__main-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.player__main-actions--secondary {
-  justify-content: space-evenly;
-}
-
-.player__main-actions__button {
-  cursor: pointer;
-}
-
-.player__main-actions__button--play {
-  background: var(--nord0);
-  border-radius: 50%;
-  padding: 16px;
-}
-.player__main-actions svg {
-  --size: 48px;
-}
-.player__main-actions__button--play svg {
-  --size: 56px; 
-  --color: var(--nord6);
-  transform: translateX(4px);
-}
-.player__main-actions--secondary svg {
-  --size: 24px;
-  --color: var(--nord9);
-}
-
-.player__main-actions--mini {
-  justify-content: space-evenly;
-  background: var(--nord3);
-  padding: .6em;
-}
-.player__main-actions--mini svg {
-  --size: 20px;
-}
-.player__main-actions--mini
-.player__main-actions__button--play svg {
-  transform: translateX(2px);
-}
-/* END PLAYER*/
 
 /* ALBUM GRID LIST */
 .album-grid-list {
-  width: 100%;
-  max-width: 400px;
+  width: 95%;
+  /* max-width: 400px; */
   margin: 1em auto;
   margin-top: 0;
   padding: 1em;
   /* background: var(--nord6); */
   border-radius: 6px;
   display: grid;
+  grid-row-gap: 10px;
+}
+.album-grid-list h3 {
+  grid-column: 1/-1;
 }
 
 @media(min-width:650px) {
@@ -216,8 +149,9 @@ h3 {
 }
 
 .album-info {
-  margin-bottom: 1em;
-  padding-bottom: 1em;
+  padding: 1em;
+  border-radius: 5px;
+  background-color: var(--nord5);
   display: grid;
   grid-template-columns: 80px 1fr;
   grid-column-gap: 10px;
@@ -229,7 +163,8 @@ h3 {
   max-width: 100%;
   border-radius: 3px;
   /* box-shadow: 1px 1px 3px var(--nord3); */
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  /* box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23); */
+  display: block;
 }
 
 .album-info p {
@@ -267,7 +202,6 @@ song-item:nth-of-type(2n) {
 }
 
 .song-list__item .icon {
-  vertical-align: middle;
 }
 
 .song-list__item p {
@@ -289,6 +223,7 @@ song-item:nth-of-type(2n) {
   margin-bottom: 0;
 }
 
+.album,
 .song-options,
 .song-options--vertical {
   grid-column: span 2;
@@ -301,12 +236,15 @@ song-item:nth-of-type(2n) {
   flex-direction: column;
   gap: 20px;
 }
+.album-options {
+  border-top: none;
+}
 .song-options--vertical {
   border-top: none;
   gap: 0;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 720px) {
   .song-options {
     flex-direction: row;
   }
@@ -332,10 +270,15 @@ song-item:nth-of-type(2n) {
 
 .playlist-list .playlist-item {
   padding: .5em;
+  display: flex;
 }
 
 .playlist-list .playlist-item:nth-of-type(2n) {
   background: var(--nord5);
+}
+
+.playlist-list .playlist-item .playlist-view {
+  margin-left: auto;
 }
 
 .new-playlist {
@@ -438,3 +381,39 @@ song-item:nth-of-type(2n) {
 .playlist__list-item--album .playlist__list-item__name {
   margin-bottom: 0;
 }
+
+/* END PLAYLIST */
+
+/* MINI-PLAYER */
+.mini-player {
+  display: grid;
+  grid-template-columns: 1fr 40px;
+  font-size: 85%;
+  padding: .3em;
+  border-radius: 4px; 
+  opacity: .3;
+}
+.mini-player svg {
+  --size: 18px;
+}
+.mini-player p {
+  margin: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.mini-player__play {
+  grid-row: 1/3;
+  grid-column: 2;
+  align-self: center;
+  justify-self: center;
+}
+.mini-player__artist,
+.mini-player__song {
+  grid-column: 1;
+  text-align: right;
+}
+.mini-player__artist {
+  color: var(--nord3);
+}
+/* END MINI-PLAYER */

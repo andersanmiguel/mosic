@@ -4,19 +4,16 @@ class SongOptions extends BaseComponent {
   properties = ['id'];
   components = ['/js/playlist-list.js'];
 
-  beforeMount() {
-    this.showPlaylists = false;
-  }
-
   mounted() {
+    this.props.showPlaylists = false;
     this.addBindings();
   }
 
   addBindings() {
     this.querySelector('#add-to-playlist').addEventListener('click', e => {
-      this.showPlaylists = !this.showPlaylists;      
-      this.render();
-      this.addBindings();
+      this.props.showPlaylists = !this.props.showPlaylists;      
+      // this.render();
+      // this.addBindings();
     });
   }
 
@@ -41,10 +38,11 @@ class SongOptions extends BaseComponent {
         </span>
       </div>
 
-      ${ this.showPlaylists ? `<playlist-list song-id="${ this.getAttribute('id') }"></playlist-list>` : '' }
+      <playlist-list song-id="${ this.getAttribute('id') }" bind-show="showPlaylists"></playlist-list>
     `;
 
   }
 }
+// ${ this.showPlaylists ? `<playlist-list song-id="${ this.getAttribute('id') }" bind-show="showPlaylists"></playlist-list>` : '' }
 
 export default SongOptions;

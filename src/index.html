@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
-    <title>mosic - asd</title>
+    <title>Mosic</title>
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@300&display=swap" rel="stylesheet"> 
@@ -14,23 +14,47 @@
   <body>
 
 
-    <h1>
-      <a href="/" data-mosic-link data-target="/">Mosic</a>
-    </h1>
+    <header>
+      <h1>
+        <a href="/" data-mosic-link data-target="/">Mosic</a>
+      </h1>
+      <mosic-player></mosic-player>
 
-    <mosic-router></mosic-router>
+    </header>
+
+      <mosic-router></mosic-router>
 
     <script type="module">
       import BaseComponent from '/js/base-component.js';
       window.BaseComponent = BaseComponent;
+
+      /*
+      const player = new Audio();
+      player.src = '/music/La Maravillosa Orquesta del Alcohol/Todavia no ha salido la luna/1932.mp3';
+      player.play().catch(console.log);
+      player.pause();
+      player.src = '/music/La Maravillosa Orquesta del Alcohol/Todavia no ha salido la luna/Amanecederos.mp3';
+      player.play().catch(console.log);
+      player.addEventListener('ended', (event) => {
+        console.log('Video stopped either because 1) it was over, ' +
+            'or 2) no further data is available.');
+      });
+      */
       
       import MosicRouter from '/js/router.js';
       customElements.define('mosic-router', MosicRouter);
 
       import AlbumList from '/js/album-list.js';
       import AlbumFull from '/js/album-full.js';
+      import PlaylistView from '/js/playlist-view.js';
+      import TestTest from '/js/test-test.js';
+      import MosicPlayer from '/js/mosic-player.js';
       customElements.define('album-list', AlbumList);
       customElements.define('album-full', AlbumFull);
+      customElements.define('playlist-view', PlaylistView);
+      customElements.define('mosic-player', MosicPlayer);
+
+
     </script>
 
   </body>

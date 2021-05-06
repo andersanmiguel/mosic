@@ -1,10 +1,8 @@
 class SongList extends BaseComponent {
 
   static tagName = 'song-list';
-  static properties = ['songs'];
-
-  mounted() {
-  }
+  static properties = ['songs', 'playlist'];
+  components = ['/js/song-item.js'];
 
   get html() {
     let songs = [];
@@ -16,7 +14,7 @@ class SongList extends BaseComponent {
       <div class="song-list">
       ${ songs.map(song => {
         return `
-          <song-item title="${ song.title }" id="${ song.id }" ${ song.active ? '' : 'hidden-options' }></song-item>
+          <song-item title="${ song.title }" id="${ song.id }" ${ song.active ? '' : 'hidden-options' } ${ this.hasAttribute('playlist') ? `playlist="${ this.getAttribute('playlist') }"` : '' }></song-item>
         `;
       }).join('') }
       </div>

@@ -6,7 +6,7 @@ class PlaylistList extends BaseComponent {
   beforeMount() {
     this.d = [];
 
-    this.queryString = { query: `
+    this.query = { query: `
       {
         playlists {
           id
@@ -23,7 +23,7 @@ class PlaylistList extends BaseComponent {
   }
 
   async createTree() {
-    const data = await this.apiRequest();
+    const data = await this.apiRequest(this.query);
     this.d = data.data.playlists;
     this.render(this.listHtml, this.listContainer);
   }
@@ -43,7 +43,7 @@ class PlaylistList extends BaseComponent {
     });
 
     this.addEventListener('click', async e => {
-      if ( !e.target.classList.contains('playlist-item') ) {
+      if ( !e.target.classList.contains('playlist-name') ) {
         return;
       }
 
@@ -82,7 +82,17 @@ class PlaylistList extends BaseComponent {
   get listHtml() {
     return `
       ${ this.d.map(playlist => {
-        return `<span class="playlist-item group-events" data-id="${ playlist.id }">${ playlist.name }</span>`
+        return `
+          <p class="playlist-item">
+            <span class="playlist-name group-events" data-id="${ playlist.id }">
+              <svg class="icon"><use xlink:href="/img/sprite.svg#icon-check"></use></svg>
+              ${ playlist.name }
+            </span>
+            <span class="playlist-view end-list group-events" data-mosic-link data-target="/playlist/${ playlist.id }">
+              <svg class="icon"><use xlink:href="/img/sprite.svg#icon-external-link"></use></svg>
+            </span>
+          </p>
+        `
       }).join('') }
     `;
   }
