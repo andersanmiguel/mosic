@@ -9,7 +9,7 @@ services:
       - ./data:/app/data
     command: npm run serve:api
     ports:
-      - "5554:8888"
+      - "${API_PORT}:8888"
   web:
     build:
       context: ./
@@ -17,10 +17,10 @@ services:
       target: web
     volumes:
       - ./src:/app/src
-      - ./src/music:/app/src/music
+      - ${MUSIC_PATH}:/app/src/music
     command: npm run serve:web
     ports:
-      - "5555:8080"
+      - "${WEB_PORT}:8080"
   cli:
     build:
       context: ./
@@ -29,5 +29,5 @@ services:
     profiles: ['cli']
     volumes:
       - ./data:/app/data
-      - ./src/music:/app/src/music
+      - ${MUSIC_PATH}:/app/src/music
     command: node walker walk
