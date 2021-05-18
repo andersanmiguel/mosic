@@ -3,7 +3,6 @@ class AlbumList extends BaseComponent {
 
   static tagName = 'album-list';
   components = ['/js/album-item.js', '/js/test-test.js'];
-  noRender = true;
 
   beforeMount() {
     this.d = [];
@@ -25,19 +24,13 @@ class AlbumList extends BaseComponent {
   async mounted() {
     const data = await this.apiRequest();
     this.data.albums = data.data.albums;
-    this.props.filter = '';
-    // this.render();
-
-    // this.listContainer = this.querySelector('.album-grid-list');
-    // this.render(this.listHtml, this.listContainer);
-    window.requestAnimationFrame(_ => {
-      this.filterTrigger = this.querySelector('.big-box');
-      this.addBindings();
-    });
+    this.data._filter = '';
+    this.data._placeholderText = 'Search...';
   }
 
   addBindings() {
 
+    this.filterTrigger = this.querySelector('.big-box');
     let debounceTrigger;
     this.filterTrigger.addEventListener('keydown', e => {
       if (debounceTrigger) {
@@ -45,8 +38,7 @@ class AlbumList extends BaseComponent {
       }
 
       debounceTrigger = window.setTimeout(_ => {
-        this.props.filter = e.target.value.toLowerCase();
-        // this.render(this.listHtml, this.listContainer);
+        this.data._filter = e.target.value.toLowerCase();
       }, 500);
     });
   }
@@ -58,11 +50,10 @@ class AlbumList extends BaseComponent {
   get html() {
 
     return `
-      <input type="text" class="big-box" bind bind-value="filter" name="filter" placeholder="Search..." autofocus="autofocus">
+      <input type="text" class="big-box" bind-attr="placeholder:placeholderText,value:filter" name="filter" autofocus="autofocus">
 
+      <div class="album-grid-list" bind-content="listHtml"></div>
 
-      <div class="album-grid-list" bind-content content="listHtml">
-      </div>
     `;
 
   }
@@ -75,10 +66,10 @@ class AlbumList extends BaseComponent {
     if (!this.filter) {
       return `
         
-        ${ this.props.filter ? 
+        ${ this.data._filter ? 
 
             this.data.albums.map(item => {
-              if (!item.title.toLowerCase().includes(this.props.filter) && !item.artist.name.toLowerCase().includes(this.props.filter)) {
+              if (!item.title.toLowerCase().includes(this.data._filter) && !item.artist.name.toLowerCase().includes(this.data._filter)) {
                 return;
               }
               return `

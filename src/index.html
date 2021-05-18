@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
+    <link rel="manifest" href="manifest.json">
     <title>Mosic</title>
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -28,6 +29,15 @@
       import BaseComponent from '/js/base-component.js';
       window.BaseComponent = BaseComponent;
 
+      // Queue microtask polyfill
+      if (typeof window.queueMicrotask !== "function") {
+        window.queueMicrotask = function (callback) {
+          Promise.resolve()
+            .then(callback)
+            .catch(e => setTimeout(() => { throw e; })); // report exceptions
+        };
+      }
+
       /*
       const player = new Audio();
       player.src = '/music/La Maravillosa Orquesta del Alcohol/Todavia no ha salido la luna/1932.mp3';
@@ -47,12 +57,15 @@
       import AlbumList from '/js/album-list.js';
       import AlbumFull from '/js/album-full.js';
       import PlaylistView from '/js/playlist-view.js';
+      import QueueView from '/js/queue-view.js';
       import TestTest from '/js/test-test.js';
       import MosicPlayer from '/js/mosic-player.js';
       customElements.define('album-list', AlbumList);
       customElements.define('album-full', AlbumFull);
       customElements.define('playlist-view', PlaylistView);
+      customElements.define('queue-view', QueueView);
       customElements.define('mosic-player', MosicPlayer);
+      customElements.define('test-test', TestTest);
 
 
     </script>

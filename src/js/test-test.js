@@ -3,22 +3,24 @@ class TestTest extends BaseComponent {
 
   static tagName = 'test-test';
 
-  mounted() {
-    this.props._count = 0;
+  async mounted() {
+    this.data._count = 0;
     setInterval(_ => {
-      this.props._count++;
+      this.data._count++;
     }, 1000);
   }
 
   get html() {
     return `
-      <h2>Color Counter</h2>
-      <p class="counter" bind-content content="count"></p>
+      <div style="max-width: 600px; margin: auto">
+        <h2>Color Counter</h2>
+        <p class="counter" bind-content="count"></p>
+      </div>
     `;
   }
   
   get count() {
-    return `<span style="background: hsl(${this.props._count * 21}, 80%, 50%); width: 20px; height: 20px; display: block;"></span>`;
+    return `<p style="background: hsl(${this.data._count * 8}, 80%, 50%); width: 200px; height: 200px;"></p>`;
   }
   
 

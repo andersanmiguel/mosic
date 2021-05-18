@@ -7,20 +7,44 @@ const queue = new Queue;
 
 class BaseComponent extends HTMLElement {
 
+  eventRegistry = {};
+
   constructor() {
     super();
     this.queue = queue;
     // Render count => debug
     this.renderCounter = 0;
+
+    this.renderStack = [];
     // Event Bus => TODO: refactor, change to pub/sub?
     this.$evt = eventBus;
 
+    this.eventRegistry = {};
+
     // Data handling, if this.data.something is set, render the component
+    // if this.data._something is not needed a full render
     const handlerData = {
       set(obj, prop, value) {
-        obj[prop] = value;
-        obj._this.debounceRender();
-        return true;
+
+        if (prop.startsWith('_')) {
+          if (obj[prop] != value) {
+            // console.log(obj._this.eventRegistry);
+            // window.requestAnimationFrame(_ => {
+            // Promise.resolve().then(_ => {
+            window.queueMicrotask(_ => {
+              obj._this.emit('prop-changed', { prop: prop.substring(1), val: value });
+              obj._this.emit('prop-changed-' + prop.substring(1), { val: value });
+            });
+            obj[prop] = value;
+            obj._this.bindShow(prop);
+          }
+          return true;
+        } else {
+          obj[prop] = value;
+          obj._this.debounceRender();
+          return true;
+        }
+
       },
       get(obj, prop) {
         return obj[prop]; 
@@ -28,39 +52,26 @@ class BaseComponent extends HTMLElement {
     };
     this.data = new Proxy({_this: this}, handlerData);
 
-    // Props handling, if this.props.something is set, check directives
-    // TODO: rename
-    const handlerProps = {
-      set(obj, prop, value) {
-        if (obj[prop] != value) {
-          obj[prop] = value;
-          obj._this.bindAttrs();
-          obj._this.bindContent();
-          obj._this.bindShow();
-        }
-        return true;
-      },
-      get(obj, prop) {
-        return obj[prop]; 
-      }
-    };
-    this.props = new Proxy({_this: this}, handlerProps);
-    
     // Call beforemount hook
     this.beforeMount();
   }
 
   // Component is injected to page
-  connectedCallback() {
+  async connectedCallback() {
     this.loadComponents();
     // First render if is not a data driven component
-    // Avoid double rendering, refactor?
+    // Avoid double rendering
     if (!this.queryString) {
       this.render();
     }
 
     // Call mounted hook
-    this.mounted();
+    await this.mounted();
+    // Add bindings on next frame, just to be sure that the DOM is loaded
+    // as the render is debounced
+    window.queueMicrotask(_ => {
+      this.addBindings();
+    });
   }
 
   disconnnectedCallback() {
@@ -77,7 +88,7 @@ class BaseComponent extends HTMLElement {
     // console.log(name, oldValue, newValue);
     if (oldValue !== newValue) {
       // Set data => trigger rendering on handlerData
-      this.data[name] = this.newValue;
+      this.data[name] = newValue;
     }
   }
 
@@ -127,7 +138,10 @@ class BaseComponent extends HTMLElement {
   beforeMount() {
     return;
   }
-  mounted() {
+  async mounted() {
+    return;
+  }
+  addBindings() {
     return;
   }
   destroyed() {
@@ -149,57 +163,103 @@ class BaseComponent extends HTMLElement {
     }
   */
   bindShow() {
-    const $el = this.querySelector('[bind-show]');
-    if (!$el) {
-      return;
-    }
-    $el.style.display = this.props[$el.getAttribute('bind-show')] ? 'initial' : 'none';
-  }
-  bindContent() {
-    const $el = this.querySelector('[bind-content]');
-    if (!$el) {
-      return;
-    }
-    // console.log('attribute content', this.tagName, $el);
-    // console.log(this.tagName, this[$el.getAttribute('content')]);
-    this.render(this[$el.getAttribute('content')], $el);
-  }
-  bindAttrs() {
-    const $el = this.querySelector('[bind-data]');
-    if (!$el?.attributes) {
+
+    const els = [...this.querySelectorAll('[bind-show]')];
+    if (!els.length === 0) {
       return;
     }
 
-    const attrs = [];
-
-    for (let i = 0; i < $el.attributes.length; i++) {
-      const name = $el.attributes[i].nodeName;
-      const val = $el.attributes[i].value;
-
-      if (!name.startsWith('bind') || name === 'bind-data') {
-        continue;
-      }
-      attrs.push( { name, val } );
-    }
-
-    attrs.forEach(attr => {
-      const val = this.props[attr.val] || '';
-      const attrValue = typeof val != 'string' ? JSON.stringify(val) : val;
-      console.log(attrValue);
-      $el.setAttribute(attr.name.replace('bind-', ''), attrValue);
+    els.forEach(el => {
+      el.style.display = this.data[`_${ el.getAttribute('bind-show') }`] ? 'initial' : 'none'; 
     });
 
+  }
+
+  bindContent(container) {
+
+    const els = [...container.querySelectorAll('[bind-content]')];
+    if (!els.length === 0) {
+      return;
+    }
+
+    els.forEach(el => {
+        
+      for (let i = 0; i < el.attributes.length; i++) {
+        if (el.attributes[i].nodeName !== 'bind-content') {
+          continue;
+        }
+
+
+        const prop = el.attributes[i].value;
+        this.on('prop-changed', { content: prop }, payload => {
+          const content = payload.content in this ? this[payload.content] : '';
+          if (content) {
+            // NOTE: special chars like & => &amp;
+            if (content === el.innerHTML) {
+              return;
+            }
+
+            this.render(content, el);
+          }
+        });
+
+      }
+
+    });
+
+  }
+  
+  bindAttrs(container) {
+    // If has been a partial render, only check the that parts attrs
+    const els = [...container.querySelectorAll('[bind-attr]')];
+    if (!els.length === 0) {
+      return;
+    }
+
+    els.forEach(el => {
+
+      Array.from(el.attributes)
+        .filter(attr => attr.nodeName === 'bind-attr')
+        .map(attr => attr.value.split(','))
+        .flat()
+        .map(pair => pair.split(':'))
+        .forEach(arr => {
+          let [ attr, prop ] = arr;
+          prop = prop ? prop.trim() : attr.trim();
+          this.on('prop-changed-' + prop, { attr: attr.trim() }, payload => {
+            // console.log(el, payload);
+            const attrValue = typeof payload.val != 'string' ? JSON.stringify(payload.val) : payload.val;
+            el.setAttribute(payload.attr, attrValue);
+          });
+        });
+
+    });
   }
 
   // Render only once if data properties are set immediately
   debounceRender(html, el) {
-    if (this.debounce) {
-      window.cancelAnimationFrame(this.debounce);
+
+    // if (this.debounce) {
+    //   window.cancelAnimationFrame(this.debounce);
+    // }
+
+    // this.debounce = window.requestAnimationFrame(_ => {
+    //   this.render(html, el);
+    // });
+
+    // https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API/Microtask_guide
+    this.renderStack.push([ html, el ]);
+
+    if (this.renderStack.length === 1) {
+      queueMicrotask(() => {
+        // const json = JSON.stringify(messageQueue);
+        // messageQueue.length = 0;
+        const [html, el] = this.renderStack.pop();
+        this.renderStack.length = 0;
+        this.render(html, el);
+      });
     }
 
-    this.debounce = window.requestAnimationFrame(_ => {
-      this.render(html, el);
-    });
   }
 
   render(html, el) {
@@ -207,17 +267,51 @@ class BaseComponent extends HTMLElement {
     // set defaults
     const htmlString = html || this.html;
     const container = el || this;
+
+
+    // if (container.innerHTML === htmlString) {
+    //   return;
+    // }
+
     // innerHTML, TODO: research if is needed
     const frag = document.createRange().createContextualFragment(htmlString);
     container.replaceChildren(frag);
 
-    this.bindAttrs();
+    this.bindAttrs(container);
+
+    // I know that is a complete render (not partial) if there is not
+    // html an not el
     if (!html && !el) {
       // Debug => count number of renderings
-      // console.log('renderCount: ', this.tagName, ++this.renderCounter);
-      this.bindContent();
+      console.log('renderCount: ', this.tagName, ++this.renderCounter);
+      this.bindContent(container);
+    }
+    this.bindContent(container);
+
+  }
+
+  on(event, data, callback) {
+    // this.on('prop-changed-' + `_${ val }`, { attrName: name.replace('bind-', '') }, (args) => {
+
+    // console.log(this, event, data, callback);
+    if (!this.eventRegistry[event]) {
+      this.eventRegistry[event] = [];
     }
 
+    this.eventRegistry[event].push({
+      data: data,
+      cb: callback
+    });
+  }
+
+  emit(event, payload) {
+    // console.log(this, event, payload);
+    if (this.eventRegistry[event]) {
+      this.eventRegistry[event].forEach(entry => {
+        const { data, cb } = entry;
+        cb({...data, ...payload});
+      });
+    }
   }
 
 }

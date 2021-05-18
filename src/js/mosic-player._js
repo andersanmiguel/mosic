@@ -10,7 +10,7 @@ class MosicPlayer extends BaseComponent {
 
   async mounted() {
     this.player = this.querySelector('audio');
-    this.data._song = {};
+    this.song = {};
     this.data._status = true;
     this.visible = true;
   }
@@ -18,28 +18,35 @@ class MosicPlayer extends BaseComponent {
   addBindings() {
     if (this.queue.currentSong) {
       this.ready = true;
-      this.data._song = this.queue.currentSong;
+      this.song = this.queue.currentSong;
     } else {
       this.queue.on('song-added', _ => {
         this.ready = true;
-        this.data._song = this.queue.currentSong;
+        this.song = this.queue.currentSong;
+        this.updateMetadata();
       });
       this.queue.on('song-changed', _ => {
         this.ready = true;
-        this.data._song = this.queue.currentSong;
+        this.song = this.queue.currentSong;
+        this.updateMetadata();
       });
     }
 
     this.querySelector('.mini-player__play').addEventListener('click', _ => {
       if (this.ready) {
         this.player.paused ? this.player.play() : this.player.pause();
+        this.data._status = this.player.paused;
       }
     });
 
-    this.querySelector('.mini-player__ff').addEventListener('click', _ => {
+    this.querySelector('.mini-player__ff').addEventListener('click', async _ => {
       if (this.ready) {
-        this.queue.nextSong;
+        this.song = this.queue.nextSong;
       }
+      // this.player.setAttribute('src', this.song.url.replace('/media/ander/music', '/music'));
+      // console.log(this.data._status, this.song, this.player.src);
+      // await this.player.play();
+      this.updateMetadata();
     });
 
     this.player.addEventListener('pause', e => {
@@ -52,8 +59,8 @@ class MosicPlayer extends BaseComponent {
       this.data._status = this.player.paused;
     });
 
-    this.player.addEventListener('ended', _ => {
-      this.queue.nextSong;
+    this.player.addEventListener('ended', async _ => {
+      this.data._song = this.queue.nextSong;
     });
 
     this.player.addEventListener('timeupdate', e => {
@@ -66,52 +73,40 @@ class MosicPlayer extends BaseComponent {
     //   this.visible = !document.hidden;
     // });
 
-    this.on('prop-changed-song', null, async payload => {
-      const song = payload.val;
-      const query = { query: `
-        {
-          song (id: ${ song.id }) {
-            title
-            url
-            artistName
-            albumTitle
-            length
-            album {
-              cover
-            }
-          }
-        }
-      `};
-      const response = await this.apiRequest(query);
-      this.data._url = response.data.song.url.replace('/media/ander/music', '/music');
-      this.data._title = response.data.song.title;
-      this.data._artist = response.data.song.artistName;
-
-      // Promise.resolve().then(async _ => {
-      window.queueMicrotask(async _ => {
-        this.data._status ? await this.player.pause() : await this.player.play();
-        this.data._status = this.player.paused;
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.setActionHandler('nexttrack', _ => {
+        this.queue.nextSong
       });
+      navigator.mediaSession.setActionHandler('play', _ => {
+        this.player.paused ? this.player.play() : this.player.pause();
+      });
+      navigator.mediaSession.setActionHandler('pause', _ => {
+        this.player.paused ? this.player.play() : this.player.pause();
+      });
+    }
 
-      if ('mediaSession' in navigator) {
-        navigator.mediaSession.metadata = new MediaMetadata({
-          title: response.data.song.title,
-          artist: response.data.song.artistName,
-          album: response.data.song.albumTitle,
-          artwork: [
-            { src: response.data.song.album.cover.replace('/media/ander/music', '/music'), sizes: '512x512', type: 'image/jpg' }
-          ]
-        });
+  }
 
-        navigator.mediaSession.setActionHandler('nexttrack', _ => { this.queue.nextSong });
-        navigator.mediaSession.setActionHandler('play', _ => {
-          this.player.paused ? this.player.play() : this.player.pause();
-        });
-        navigator.mediaSession.setActionHandler('pause', _ => {
-          this.player.paused ? this.player.play() : this.player.pause();
-        });
-      }
+  async updateMetadata() {
+    const song = this.song;
+    this.data._url = song.url.replace('/media/ander/music', '/music');
+    this.data._title = song.title;
+    this.data._artist = song.artistName;
 
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: song.title,
+        artist: song.artistName,
+        album: song.albumTitle,
+        artwork: [
+          { src: song.cover.replace('/media/ander/music', '/music'), sizes: '512x512', type: 'image/jpg' }
+        ]
+      });
+    }
+
+    Promise.resolve().then(async _ => {
+      this.data._status ? await this.player.pause() : await this.player.play();
+      this.data._status = this.player.paused;
     });
   }
 

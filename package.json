@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "serve:api": "tuql --db data/music.db --port 8888 --graphiql",
-    "serve:web": "live-server --port=8080 --entry-file=index.html src/",
+    "serve:api": "tuql --db /app/data/music.db --port 8888 --graphiql",
+    "serve:web": "live-server --port=8080 --watch=index.html --entry-file=index.html src/",
     "serve:screens": "live-server --port=8081 screens",
-    "serve": "run-p serve:*"
+    "serve": "run-p serve:api serve:web"
   },
   "author": "",
   "license": "ISC",

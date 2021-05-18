@@ -1,0 +1,15 @@
+{
+  "name": "Mosic Player",
+  "short_name": "Mosic",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#d8dee9",
+  "description": "A music player",
+  "icons": [{
+    "src": "img/mosic.png",
+    "sizes": "256x256",
+    "type": "image/png"
+  }],
+  "related_applications": [{
+  }]
+}

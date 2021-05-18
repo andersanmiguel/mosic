@@ -46,7 +46,7 @@ class SongItem extends BaseComponent {
           }
 
           ${ this.hasAttribute('hidden-options') ? '' : `
-          <song-options id="${ this.getAttribute('id') }"></song-options>
+          <song-options title="${ this.getAttribute('title') }" id="${ this.getAttribute('id') }"></song-options>
           `}
 
       </div>

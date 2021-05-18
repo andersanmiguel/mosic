@@ -5,22 +5,23 @@ class SongOptions extends BaseComponent {
   components = ['/js/playlist-list.js'];
 
   mounted() {
-    this.props.showPlaylists = false;
-    this.addBindings();
+    this.data._showPlaylists = false;
   }
 
   addBindings() {
-    this.querySelector('#add-to-playlist').addEventListener('click', e => {
-      this.props.showPlaylists = !this.props.showPlaylists;      
-      // this.render();
-      // this.addBindings();
+    this.querySelector('#add-to-playlist').addEventListener('click', _ => {
+      this.data._showPlaylists = !this.data._showPlaylists;      
+    });
+
+    this.querySelector('#queue-song').addEventListener('click', _ => {
+      this.queue.addSong({ id: this.getAttribute('id'), title: this.getAttribute('title') }).bind(this.queue);
     });
   }
 
   get html() {
     return `
       <div class="song-options">
-        <span>
+        <span id="queue-song" class="group-events">
           <svg class="icon"><use xlink:href="/img/sprite.svg#icon-list"></svg>
           Queue
         </span>

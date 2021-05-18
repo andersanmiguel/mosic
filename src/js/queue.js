@@ -1,16 +1,26 @@
 class Queue {
 
-  _songs = [];
+  _songs = new Set();
+  _songsArr = [];
 
   constructor(...songs) {
-    this._songs = [...songs];
+    [...songs].forEach(this._songs.add);
     this.cursor = 0;
-    this.random = false;
-    this.eventResgistry = {};
+    this.random = true;
+    this.eventRegistry = {};
   }
 
   addSong(song) {
-    this._songs.push(song);
+    this._songs.add(song);
+
+    if (this.debounce) {
+      window.cancelAnimationFrame(this.debounce);
+    }
+
+    this.debounce = window.requestAnimationFrame(_ => {
+      this._songsArr = [...this._songs]
+      this.emit('song-added', this._songsArr);
+    });
   }
 
   shuffle() {
@@ -22,13 +32,14 @@ class Queue {
   next(cursor) {
     // if cursor received return it without change real cursor
     let c = cursor || this.cursor;
-    c = c++ === this._songs.length ? 0 : c;
+    c = c++ === (this._songs.size - 1) ? 0 : c;
     if (cursor) {
       return c;
     }
     this.cursor = c;
 
-    this.eventResgistry['song-changed'](this.currentSong);
+    // this.eventRegistry['song-changed'](this.currentSong);
+    this.emit('song-changed', this.currentSong);
   }
 
   prev() {
@@ -36,11 +47,25 @@ class Queue {
     this.cursor = this.cursor < 0 ? 0 : this.cursor;
   }
 
+  get remainingSongs() {
+    const start = this.cursor + 1;
+    return this._songsArr.slice(start);
+  }
+
   get currentSong() {
-    return this._songs[this.cursor];
+    return this._songsArr[this.cursor];
   }
 
   get nextSong() {
+    if (this.random) {
+      let idx = [...this.remainingSongs.keys()][Math.floor(Math.random() * this.remainingSongs.length)];
+      if (idx === 0) {
+        idx++;
+      }
+      const cursor = idx + this.cursor;
+      const current = this._songsArr.splice(cursor, 1);
+      this._songsArr.splice(this.cursor + 1, 0, current[0]);
+    }
     this.next();
     return this.currentSong;
   }
@@ -50,7 +75,20 @@ class Queue {
   }
 
   on(event, callback) {
-    this.eventResgistry[event] = callback;
+
+    if (!this.eventRegistry[event]) {
+      this.eventRegistry[event] = [];
+    }
+
+    this.eventRegistry[event].push(callback);
+  }
+
+  emit(event, ...args) {
+    if (event in this.eventRegistry) {
+      this.eventRegistry[event].forEach(eventCallback => {
+        eventCallback(...args);
+      });
+    }
   }
 
 }

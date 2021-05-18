@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  api:
+    build:
+      context: ./
+      dockerfile: ./ci/api/Dockerfile
+      target: api
+    volumes:
+      - ./data:/app/data
+    command: npm run serve:api
+    ports:
+      - "8888:8888"
+  web:
+    build:
+      context: ./
+      dockerfile: ./ci/api/Dockerfile
+      target: web
+    volumes:
+      - ./src:/app/src
+      - ./src/music:/app/src/music
+    command: npm run serve:web
+    ports:
+      - "8080:8080"
+  cli:
+    build:
+      context: ./
+      dockerfile: ./ci/api/Dockerfile
+      target: cli
+    profiles: ['cli']
+    volumes:
+      - ./data:/app/data
+      - ./src/music:/app/server/music
+    command: node walker walk

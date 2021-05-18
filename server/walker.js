@@ -99,7 +99,9 @@ if (argv._.includes('walk')){
 
 
 
-  const dirname = "/media/ander/music";
+  // const dirname = "/media/ander/music";
+  const dirname = "/app/server/music";
+
   console.log(dirname);
 
 

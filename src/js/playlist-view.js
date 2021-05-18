@@ -24,7 +24,10 @@ class PlaylistView extends BaseComponent {
   async mounted() {
     this.d = await this.apiRequest();
     this.data.playlist = this.d.data.playlist;
-    this.props.songs = this.d.data.playlist.songs;
+    this.data._songs = this.d.data.playlist.songs;
+  }
+
+  addBindings() {
     this.$evt.addEventListener('playlist-updated', _ => {
       this.mounted();
     });
@@ -42,7 +45,7 @@ class PlaylistView extends BaseComponent {
           </p>
         </div>
         <h3>Tracks:</h3>
-        <song-list bind-data bind-songs="songs" playlist="${ this.data.playlist.id }"></song-list>
+        <song-list bind-attr="songs" playlist="${ this.data.playlist.id }"></song-list>
       </div>
     `;
 

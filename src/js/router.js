@@ -42,13 +42,20 @@ let routes = [
     }
   },
   {
+    name: 'queue',
+    path: '/queue',
+    regex: /^\/queue\/?$/,
+    template: _ => {
+      return `<queue-view></queue-view>`;
+    }
+  },
+  {
     name: 'test',
     path: '/test',
     regex: /^\/test\/?$/,
     template: _ => {
       return `
         <test-test></test-test>
-        <mosic-player src="${ '/media/ander/music/La Maravillosa Orquesta del Alcohol/Todavia no ha salido la luna/1932.mp3' }"></mosic-player>
       `;
     }
   },
