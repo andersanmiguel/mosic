@@ -1,8 +1,7 @@
-import BaseComponent from '/js/base-component.js';
 class MosicFrontpage extends BaseComponent {
 
   static tagName = 'mosic-frontpage';
-  components = ['/js/album-list.js'];
+  components = ['/mosic/js/album-list.js'];
   noRender = true;
 
   beforeMount() {

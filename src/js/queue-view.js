@@ -1,9 +1,8 @@
-import BaseComponent from '/js/base-component.js';
 class QueueView extends BaseComponent {
 
   static tagName = 'playlist-view';
   properties = ['id'];
-  components = ['/js/song-list.js'];
+  components = ['/mosic/js/song-list.js'];
 
   async mounted() {
     this.data._songs = this.queue.remainingSongs;

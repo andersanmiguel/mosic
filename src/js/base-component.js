@@ -2,7 +2,7 @@ class EventBus extends HTMLElement {}
 customElements.define('event-bus', EventBus);
 const eventBus = document.createElement('event-bus');
 document.body.append(eventBus);
-import Queue from '/js/queue.js';
+import Queue from '/mosic/js/queue.js';
 const queue = new Queue;
 
 class BaseComponent extends HTMLElement {

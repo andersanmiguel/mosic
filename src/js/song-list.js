@@ -2,7 +2,7 @@ class SongList extends BaseComponent {
 
   static tagName = 'song-list';
   static properties = ['songs', 'playlist'];
-  components = ['/js/song-item.js'];
+  components = ['/mosic/js/song-item.js'];
 
   get html() {
     let songs = [];

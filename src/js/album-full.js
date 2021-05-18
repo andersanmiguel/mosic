@@ -1,9 +1,8 @@
-import BaseComponent from '/js/base-component.js';
 class AlbumFull extends BaseComponent {
 
   static tagName = 'album-full';
   properties = ['id'];
-  components = ['/js/song-list.js'];
+  components = ['/mosic/js/song-list.js'];
 
   beforeMount() {
     this.queryString = { query: `
@@ -63,7 +62,7 @@ class AlbumFull extends BaseComponent {
         <h3>Album:</h3>
 
         <div class="album-info">
-          <img class="album-info__cover" src="${ this.data.album.cover?.replace('/app/src/music', '/music') || '' }">
+          <img class="album-info__cover" src="${ this.data.album.cover?.replace('/app/src/music', '/mosic/music') || '' }">
 
           <p class="album-info__name">
             <svg class="icon"><use href="/img/sprite.svg#icon-disc"></use></svg>

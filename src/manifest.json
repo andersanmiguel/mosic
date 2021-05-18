@@ -6,7 +6,7 @@
   "background_color": "#d8dee9",
   "description": "A music player",
   "icons": [{
-    "src": "img/mosic.png",
+    "src": "/mosic/img/mosic.png",
     "sizes": "256x256",
     "type": "image/png"
   }],

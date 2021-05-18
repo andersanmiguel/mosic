@@ -1,4 +1,3 @@
-import BaseComponent from '/js/base-component.js';
 class MosicPlayer extends BaseComponent {
 
   ready = false;
@@ -89,7 +88,7 @@ class MosicPlayer extends BaseComponent {
 
   async updateMetadata() {
     const song = this.song;
-    this.data._url = song.url.replace('/app/src/music', '/music');
+    this.data._url = song.url.replace('/app/src/music', '/mosic/music');
     this.data._title = song.title;
     this.data._artist = song.artistName;
 
