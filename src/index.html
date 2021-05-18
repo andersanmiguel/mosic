@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
+    <meta name="color" content="#d8dee9">
     <link rel="manifest" href="manifest.json">
     <title>Mosic</title>
 
@@ -26,8 +27,11 @@
       <mosic-router></mosic-router>
 
     <script type="module">
+      // window.apiRoute = 'http://192.168.1.37:5554/graphql';
+      window.apiRoute = 'https://mosic.maxpowerpls.mooo.com/graphql';
       import BaseComponent from '/js/base-component.js';
       window.BaseComponent = BaseComponent;
+
 
       // Queue microtask polyfill
       if (typeof window.queueMicrotask !== "function") {

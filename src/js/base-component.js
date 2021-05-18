@@ -118,7 +118,7 @@ class BaseComponent extends HTMLElement {
     const query = queryString || this.queryString;
 
     try {
-      const response = await fetch('https://mosic.maxpowerpls.mooo.com/graphql', {
+      const response = await fetch(window.apiRoute, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
