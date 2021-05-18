@@ -1,6 +1,7 @@
 version: '3.8'
 services:
-  api:
+  mosic_api:
+    container_name: mosic_api
     build:
       context: ./
       dockerfile: ./ci/api/Dockerfile
@@ -10,7 +11,8 @@ services:
     command: npm run serve:api
     ports:
       - "${API_PORT}:8888"
-  web:
+  mosic:
+    container_name: mosic
     build:
       context: ./
       dockerfile: ./ci/api/Dockerfile
