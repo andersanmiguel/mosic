@@ -31,3 +31,13 @@ services:
       - ./data:/app/data
       - ${MUSIC_PATH}:/app/src/music
     command: node walker walk
+  cli_init:
+    build:
+      context: ./
+      dockerfile: ./ci/api/Dockerfile
+      target: cli
+    profiles: ['cli']
+    volumes:
+      - ./data:/app/data
+      - ${MUSIC_PATH}:/app/src/music
+    command: node walker init
