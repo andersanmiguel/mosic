@@ -24,5 +24,5 @@ FROM base as api
 FROM base as web
 
 FROM base as cli
-COPY server/ /app/server
-WORKDIR /app/server
+COPY server/ /app/src
+WORKDIR /app/src

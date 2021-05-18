@@ -118,7 +118,7 @@ class BaseComponent extends HTMLElement {
     const query = queryString || this.queryString;
 
     try {
-      const response = await fetch('http://192.168.1.37:8888/graphql', {
+      const response = await fetch('http://192.168.1.37:5554/graphql', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
