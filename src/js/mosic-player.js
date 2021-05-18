@@ -83,7 +83,7 @@ class MosicPlayer extends BaseComponent {
         }
       `};
       const response = await this.apiRequest(query);
-      this.data._url = response.data.song.url.replace('/media/ander/music', '/music');
+      this.data._url = response.data.song.url.replace('/app/src/music', '/music');
       this.data._title = response.data.song.title;
       this.data._artist = response.data.song.artistName;
 
@@ -99,7 +99,7 @@ class MosicPlayer extends BaseComponent {
           artist: response.data.song.artistName,
           album: response.data.song.albumTitle,
           artwork: [
-            { src: response.data.song.album.cover.replace('/media/ander/music', '/music'), sizes: '512x512', type: 'image/jpg' }
+            { src: response.data.song.album.cover.replace('/app/src/music', '/music'), sizes: '512x512', type: 'image/jpg' }
           ]
         });
 

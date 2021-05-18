@@ -4,7 +4,7 @@ class AlbumItem extends BaseComponent {
 
   beforeMount() {
     this.d = {
-      cover: this.getAttribute('cover').replace('/media/ander/music', '/music'),
+      cover: this.getAttribute('cover').replace('/app/src/music', '/music'),
       title: this.getAttribute('title'),
       artist: this.getAttribute('artist'),
       id: this.getAttribute('album-id'),

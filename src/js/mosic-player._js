@@ -89,7 +89,7 @@ class MosicPlayer extends BaseComponent {
 
   async updateMetadata() {
     const song = this.song;
-    this.data._url = song.url.replace('/media/ander/music', '/music');
+    this.data._url = song.url.replace('/app/src/music', '/music');
     this.data._title = song.title;
     this.data._artist = song.artistName;
 
@@ -99,7 +99,7 @@ class MosicPlayer extends BaseComponent {
         artist: song.artistName,
         album: song.albumTitle,
         artwork: [
-          { src: song.cover.replace('/media/ander/music', '/music'), sizes: '512x512', type: 'image/jpg' }
+          { src: song.cover.replace('/app/src/music', '/music'), sizes: '512x512', type: 'image/jpg' }
         ]
       });
     }
