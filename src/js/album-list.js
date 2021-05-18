@@ -1,7 +1,8 @@
+import BaseComponent from '/js/base-component.js';
 class AlbumList extends BaseComponent {
 
   static tagName = 'album-list';
-  components = ['/mosic/js/album-item.js', '/mosic/js/test-test.js'];
+  components = ['/js/album-item.js', '/js/test-test.js'];
 
   beforeMount() {
     this.d = [];

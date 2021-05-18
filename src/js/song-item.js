@@ -1,7 +1,8 @@
+import BaseComponent from '/js/base-component.js';
 class SongItem extends BaseComponent {
   static tagName = 'song-item';
   properties = ['title', 'id', 'hidden-options'];
-  components = ['/mosic/js/song-options.js'];
+  components = ['/js/song-options.js'];
 
   async mounted() {
     if (this.querySelector('.song-list__item__options')) {

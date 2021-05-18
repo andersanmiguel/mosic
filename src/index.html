@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
-    <link rel="manifest" href="/mosic/manifest.json">
+    <link rel="manifest" href="manifest.json">
     <title>Mosic</title>
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@300&display=swap" rel="stylesheet"> 
 
-    <link rel="stylesheet" href="/mosic//css/styles.css">
+    <link rel="stylesheet" href="/css/styles.css">
 
   </head>
   <body>
@@ -26,8 +26,7 @@
       <mosic-router></mosic-router>
 
     <script type="module">
-
-      import BaseComponent from '/mosic/js/base-component.js';
+      import BaseComponent from '/js/base-component.js';
       window.BaseComponent = BaseComponent;
 
       // Queue microtask polyfill
@@ -52,14 +51,14 @@
       });
       */
       
-      import MosicRouter from '/mosic/js/router.js';
+      import MosicRouter from '/js/router.js';
       customElements.define('mosic-router', MosicRouter);
 
-      import AlbumList from '/mosic/js/album-list.js';
-      import AlbumFull from '/mosic/js/album-full.js';
-      import PlaylistView from '/mosic/js/playlist-view.js';
-      import QueueView from '/mosic/js/queue-view.js';
-      import TestTest from '/mosic/js/test-test.js';
+      import AlbumList from '/js/album-list.js';
+      import AlbumFull from '/js/album-full.js';
+      import PlaylistView from '/js/playlist-view.js';
+      import QueueView from '/js/queue-view.js';
+      import TestTest from '/js/test-test.js';
       import MosicPlayer from '/js/mosic-player.js';
       customElements.define('album-list', AlbumList);
       customElements.define('album-full', AlbumFull);

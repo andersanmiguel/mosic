@@ -1,3 +1,4 @@
+import BaseComponent from '/js/base-component.js';
 class TestTest extends BaseComponent {
 
   static tagName = 'test-test';

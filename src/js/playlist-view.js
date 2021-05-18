@@ -1,8 +1,9 @@
+import BaseComponent from '/js/base-component.js';
 class PlaylistView extends BaseComponent {
 
   static tagName = 'playlist-view';
   properties = ['id'];
-  components = ['/mosic/js/song-list.js'];
+  components = ['/js/song-list.js'];
 
   beforeMount() {
     this.queryString = { query: `

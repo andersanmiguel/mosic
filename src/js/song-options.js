@@ -2,7 +2,7 @@ class SongOptions extends BaseComponent {
 
   static tagName = 'song-options';
   properties = ['id'];
-  components = ['/mosic/js/playlist-list.js'];
+  components = ['/js/playlist-list.js'];
 
   mounted() {
     this.data._showPlaylists = false;
