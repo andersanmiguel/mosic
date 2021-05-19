@@ -36,6 +36,11 @@ h1 > a {
   color: inherit;
 }
 
+h1 img {
+  vertical-align: bottom;
+  max-width: 48px;
+}
+
 h3 {
   color: var(--nord9);
   margin-bottom: .5em;

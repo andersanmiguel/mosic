@@ -36,9 +36,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.98994949"
-     inkscape:cx="-384.57298"
-     inkscape:cy="-626.46531"
+     inkscape:zoom="3.959798"
+     inkscape:cx="-625.57229"
+     inkscape:cy="-429.97376"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
@@ -49,7 +49,32 @@
      inkscape:window-height="1385"
      inkscape:window-x="0"
      inkscape:window-y="25"
-     inkscape:window-maximized="1" />
+     inkscape:window-maximized="1">
+    <sodipodi:guide
+       position="-48.188519,391.89394"
+       orientation="1,0"
+       id="guide899" />
+    <sodipodi:guide
+       position="-32.072343,404.84327"
+       orientation="1,0"
+       id="guide901" />
+    <sodipodi:guide
+       position="-23.519718,400.96786"
+       orientation="1,0"
+       id="guide903" />
+    <sodipodi:guide
+       position="2.1526583,412.46358"
+       orientation="0,-1"
+       id="guide907" />
+    <sodipodi:guide
+       position="-180.01116,443.1823"
+       orientation="1,0"
+       id="guide1021" />
+    <sodipodi:guide
+       position="-135.03199,450.36385"
+       orientation="1,0"
+       id="guide1023" />
+  </sodipodi:namedview>
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -58,6 +83,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -75,57 +101,58 @@
        y="-117.49114"
        style="opacity:0.6" />
     <rect
-       style="opacity:1;fill:#2e3440;fill-opacity:1;stroke:none;stroke-width:2.28536;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       style="opacity:1;fill:#2e3440;fill-opacity:1;stroke:none;stroke-width:1.9197;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
        id="rect1019"
-       width="50"
-       height="50"
-       x="-177.36536"
-       y="-155.92638"
-       inkscape:export-xdpi="30.91"
-       inkscape:export-ydpi="30.91" />
+       width="42"
+       height="42"
+       x="-180.01115"
+       y="-152.46565"
+       inkscape:export-xdpi="120.95"
+       inkscape:export-ydpi="120.95" />
     <g
        id="g1017"
-       style="stroke:#d8dee9;stroke-opacity:1"
-       transform="translate(-64.622703,-36.78864)"
-       inkscape:export-xdpi="30.91"
-       inkscape:export-ydpi="30.91">
+       style="stroke:#d8dee9;stroke-opacity:1;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none"
+       transform="translate(-71.268538,-37.33524)"
+       inkscape:export-xdpi="120.95"
+       inkscape:export-ydpi="120.95">
       <path
          id="path917"
-         style="fill:none;stroke:#d8dee9;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="fill:none;stroke:#d8dee9;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          d="m -41.22307,-82.066484 h 10.126277 m -10.126277,-9.655492 17.703352,16.969195 m -17.703352,-24.178418 17.174185,16.440028 m -17.174185,-23.863699 17.174185,16.440028 m -16.876421,-24.824008 17.174185,16.440023 M -41.22307,-115.46358 v 34.444786"
          clip-path="url(#clipPath1008)"
          transform="translate(-63.303593,4.1281796)"
          sodipodi:nodetypes="cccccccccccc" />
       <path
          id="path1012"
-         style="fill:none;stroke:#d8dee9;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="fill:none;stroke:#d8dee9;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          d="m -41.22307,-82.066484 h 10.126277 m -10.126277,-9.655492 17.703352,16.969195 m -17.703352,-24.178418 17.703352,16.440028 m -17.703352,-23.863699 17.703352,16.440028 m -17.405588,-24.824008 17.174185,16.440023 M -41.22307,-115.46358 v 34.444786"
          clip-path="url(#clipPath1008)"
          transform="matrix(-1,0,0,1,-112.18164,4.1281796)"
          sodipodi:nodetypes="cccccccccccc" />
     </g>
     <rect
-       style="fill:#d8dee9;stroke:#2e3440;stroke-width:3.15044;stroke-opacity:1;paint-order:markers fill stroke"
+       style="fill:#d8dee9;fill-opacity:1;stroke:none;stroke-width:3.39927;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       id="rect843"
+       width="1"
+       height="1"
+       x="-205.40216"
+       y="19.473583"
+       transform="rotate(45)" />
+    <rect
+       style="fill:#d8dee9;fill-opacity:1;stroke:none;stroke-width:3.39927;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
        id="rect845"
-       width="114.12517"
-       height="46.849552"
-       x="-128.71378"
-       y="-154.35117"
-       inkscape:export-xdpi="30.91"
-       inkscape:export-ydpi="30.91" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:38.1px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.398103"
-       x="-128.16412"
-       y="-112.44203"
-       id="text849"
-       transform="scale(0.96969094,1.0312564)"
-       inkscape:export-xdpi="30.91"
-       inkscape:export-ydpi="30.91"><tspan
-         sodipodi:role="line"
-         id="tspan847"
-         x="-128.16412"
-         y="-112.44203"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:38.1px;font-family:'Noto Sans CJK HK';-inkscape-font-specification:'Noto Sans CJK HK';fill:#2e3440;fill-opacity:1;stroke-width:0.398103">mosic</tspan></text>
+       width="1"
+       height="1"
+       x="-194.39951"
+       y="30.852125"
+       transform="rotate(45)" />
+    <rect
+       style="fill:#d8dee9;fill-opacity:1;stroke:none;stroke-width:3.39927;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       id="rect847"
+       width="1"
+       height="1"
+       x="-199.64566"
+       y="25.6005"
+       transform="rotate(45)" />
   </g>
 </svg>
