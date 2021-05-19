@@ -26,7 +26,7 @@ class MosicPlayer extends BaseComponent {
       });
       this.queue.on('song-changed', _ => {
         this.ready = true;
-        this.data._song = this.queue.currentSong;
+        this.data._song = this.queue.currentSong || [];
       });
     }
 
@@ -68,6 +68,13 @@ class MosicPlayer extends BaseComponent {
 
     this.on('prop-changed-song', null, async payload => {
       const song = payload.val;
+      if (!song || song.length === 0) {
+        this.data._url = '';
+        this.data._title = '';
+        this.data._artist = '';
+        this.data._status = true;
+        return;
+      }
       const query = { query: `
         {
           song (id: ${ song.id }) {

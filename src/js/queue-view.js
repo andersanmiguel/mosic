@@ -6,29 +6,45 @@ class QueueView extends BaseComponent {
   components = ['/js/song-list.js'];
 
   async mounted() {
-    this.data._songs = this.queue.remainingSongs;
-    this.data._song = this.queue.currentSong ? [this.queue.currentSong] : [];
+    this.populateList();
   }
 
   addBindings() {
     this.queue.on('song-changed', _ => {
-      this.data._song = [this.queue.currentSong];
-      this.data._songs = this.queue.remainingSongs;
+      this.populateList();
     });
     this.queue.on('song-added', _ => {
-      this.data._song = [this.queue.currentSong];
-      this.data._songs = this.queue.remainingSongs;
+      this.populateList();
     });
+
+    this.querySelector('#clear-queue').addEventListener('click', _ => {
+      this.queue.clear();
+    });
+  }
+
+  populateList() {
+    this.data._songs = this.queue.remainingSongs || [];
+    this.data._song = this.queue.currentSong ? [this.queue.currentSong] : [];
   }
 
   get html() {
 
     const html = `
       <div class="album-view">
+
+        <div style="display: flex; justify-content: space-between">
         <h3>Currently playing</h3>
-        <song-list bind-attr="songs:song"></song-list>
+
+        <p id="clear-queue" class="group-events">
+          <svg class="icon"><use href="/img/sprite.svg#icon-x-square"></use></svg>
+          Clear queue
+        </p>
+        </div>
+        <song-list bind-attr="songs:song" type="cover"></song-list>
+
         <h3>Tracks:</h3>
         <song-list bind-attr="songs"></song-list>
+
       </div>
     `;
 

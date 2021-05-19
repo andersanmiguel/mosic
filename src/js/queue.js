@@ -67,6 +67,13 @@ class Queue {
     }
   }
 
+  clear() {
+    this._songs.clear();
+    this._songsArr = [];
+    window.localStorage.removeItem('mosic-queue');
+    this.emit('song-changed', this.currentSong);
+  }
+
   get remainingSongs() {
     const start = this.cursor + 1;
     return this._songsArr.slice(start);
