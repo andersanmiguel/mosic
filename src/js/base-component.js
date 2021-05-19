@@ -25,6 +25,7 @@ class BaseComponent extends HTMLElement {
     // if this.data._something is not needed a full render
     const handlerData = {
       set(obj, prop, value) {
+      // console.log(obj._this, prop, value);
 
         if (prop.startsWith('_')) {
           if (obj[prop] != value) {
@@ -283,7 +284,7 @@ class BaseComponent extends HTMLElement {
     // html an not el
     if (!html && !el) {
       // Debug => count number of renderings
-      console.log('renderCount: ', this.tagName, ++this.renderCounter);
+      // console.log('renderCount: ', this.tagName, ++this.renderCounter);
       this.bindContent(container);
     }
     this.bindContent(container);

@@ -4,23 +4,30 @@ class Queue {
   _songsArr = [];
 
   constructor(...songs) {
+    this.renderStack = [];
     [...songs].forEach(this._songs.add);
     this.cursor = 0;
     this.random = true;
     this.eventRegistry = {};
+    window.requestAnimationFrame(() => {
+      this.load();
+    });
   }
 
   addSong(song) {
     this._songs.add(song);
 
-    if (this.debounce) {
-      window.cancelAnimationFrame(this.debounce);
-    }
+    this.renderStack.push(song);
 
-    this.debounce = window.requestAnimationFrame(_ => {
-      this._songsArr = [...this._songs]
-      this.emit('song-added', this._songsArr);
-    });
+    // this.debounce = window.requestAnimationFrame(_ => {
+    if (this.renderStack.length === 1) {
+      queueMicrotask(() => {
+        this._songsArr = [...this._songs]
+        this.emit('song-added', this._songsArr);
+        this.renderStack.length = 0;
+        this.save();
+      });
+    }
   }
 
   shuffle() {
@@ -39,12 +46,25 @@ class Queue {
     this.cursor = c;
 
     // this.eventRegistry['song-changed'](this.currentSong);
-    this.emit('song-changed', this.currentSong);
+    queueMicrotask(() => {
+      this.emit('song-changed', this.currentSong);
+    });
   }
 
   prev() {
     this.cursor--;
     this.cursor = this.cursor < 0 ? 0 : this.cursor;
+  }
+
+  save() {
+    window.localStorage.setItem('mosic-queue', JSON.stringify(this._songsArr));
+  }
+
+  load() {
+    const songs = window.localStorage.getItem('mosic-queue');
+    if (songs) {
+      JSON.parse(songs).forEach(this.addSong.bind(this));
+    }
   }
 
   get remainingSongs() {

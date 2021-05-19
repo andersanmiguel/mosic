@@ -7,11 +7,15 @@ class QueueView extends BaseComponent {
 
   async mounted() {
     this.data._songs = this.queue.remainingSongs;
-    this.data._song = [this.queue.currentSong];
+    this.data._song = this.queue.currentSong ? [this.queue.currentSong] : [];
   }
 
   addBindings() {
     this.queue.on('song-changed', _ => {
+      this.data._song = [this.queue.currentSong];
+      this.data._songs = this.queue.remainingSongs;
+    });
+    this.queue.on('song-added', _ => {
       this.data._song = [this.queue.currentSong];
       this.data._songs = this.queue.remainingSongs;
     });
