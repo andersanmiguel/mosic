@@ -41,6 +41,11 @@ class AlbumList extends BaseComponent {
         this.data._filter = e.target.value.toLowerCase();
       }, 500);
     });
+
+    this.querySelector('#show-all').addEventListener('click', e => {
+      e.preventDefault();
+      this.data._showAll = true;
+    });
   }
 
   destroyed() {
@@ -66,7 +71,7 @@ class AlbumList extends BaseComponent {
     if (!this.filter) {
       return `
         
-        ${ this.data._filter ? 
+        ${ this.data._showAll ? 
 
             this.data.albums.map(item => {
               if (!item.title.toLowerCase().includes(this.data._filter) && !item.artist.name.toLowerCase().includes(this.data._filter)) {
@@ -89,6 +94,7 @@ class AlbumList extends BaseComponent {
               <album-item cover="${item.cover}" artist="${item.artist.name}" title="${item.title}" album-id="${item.id}"></album-item>
             `;
           }).join('') }
+          <a id="show-all" href="#">Show All</a>
           `
 
         }

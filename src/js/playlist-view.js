@@ -14,6 +14,10 @@ class PlaylistView extends BaseComponent {
           songs {
             id
             title
+            artistName
+            cover
+            albumTitle
+            url
           }
         }
       }
@@ -31,17 +35,25 @@ class PlaylistView extends BaseComponent {
     this.$evt.addEventListener('playlist-updated', _ => {
       this.mounted();
     });
+
+    this.querySelector('#playlist-to-queue').addEventListener('click', _ => {
+      this.queue.clear();
+      this.data._songs.forEach(this.queue.addSong.bind(this.queue));
+    });
   }
 
   get html() {
 
     const html = `
       <div class="album-view">
-        <h3>Playlist</h3>
-        <div class="album-info">
+        <div class="side-to-side">
           <p class="album-info__name">
             <svg class="icon"><use xlink:href="/img/sprite.svg#icon-list"></use></svg>
             ${ this.data.playlist.name }
+          </p>
+          <p id="playlist-to-queue" class="group-events">
+            <svg class="icon"><use xlink:href="/img/sprite.svg#icon-play"></use></svg>
+            Play this list
           </p>
         </div>
         <h3>Tracks:</h3>

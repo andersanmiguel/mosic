@@ -32,7 +32,7 @@ class QueueView extends BaseComponent {
     const html = `
       <div class="album-view">
 
-        <div style="display: flex; justify-content: space-between">
+        <div class="side-to-side">
         <h3>Currently playing</h3>
 
         <p id="clear-queue" class="group-events">

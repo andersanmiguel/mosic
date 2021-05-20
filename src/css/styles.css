@@ -81,6 +81,11 @@ h3 {
   color: var(--nord3);
 }
 
+.side-to-side {
+  display: flex;
+  justify-content: space-between;
+}
+
 /* MAIN LAYOUT */
 
 .with-player {
