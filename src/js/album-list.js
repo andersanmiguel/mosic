@@ -39,7 +39,8 @@ class AlbumList extends BaseComponent {
 
       debounceTrigger = window.setTimeout(_ => {
         this.data._filter = e.target.value.toLowerCase();
-      }, 500);
+        this.data._showAll = true;
+      }, 300);
     });
 
     this.querySelector('#show-all').addEventListener('click', e => {
@@ -68,39 +69,41 @@ class AlbumList extends BaseComponent {
       return;
     }
 
-    if (!this.filter) {
+    // if (!this.filter) {
       return `
         
         ${ this.data._showAll ? 
 
-            this.data.albums.map(item => {
+            `
+            ${ this.data.albums.map(item => {
               if (!item.title.toLowerCase().includes(this.data._filter) && !item.artist.name.toLowerCase().includes(this.data._filter)) {
                 return;
               }
               return `
               <album-item cover="${item.cover}" artist="${item.artist.name}" title="${item.title}" album-id="${item.id}"></album-item>
             `;
-            }).join('')
+            }).join('') }
+            `
 
         :
 
           `
-          <h3>Latest albums added:</h3>
+          <h3 class="album-grid-list__row">Latest albums added:</h3>
           ${ this.data.albums.slice(-10).map(item => {
-            if (this.filter && (!item.title.toLowerCase().includes(this.filter) && !item.artist.name.toLowerCase().includes(this.filter))) {
-              return;
-            }
+            // if (this.filter && (!item.title.toLowerCase().includes(this.filter) && !item.artist.name.toLowerCase().includes(this.filter))) {
+            //   return;
+            // }
             return `
               <album-item cover="${item.cover}" artist="${item.artist.name}" title="${item.title}" album-id="${item.id}"></album-item>
             `;
           }).join('') }
-          <a id="show-all" href="#">Show All</a>
+          <a id="show-all" class="btn__ghost album-grid-list__row" href="#">Show All</a>
           `
 
         }
 
-      `
-    }
+      `;
+    // }
 
   }
 

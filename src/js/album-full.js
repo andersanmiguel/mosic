@@ -63,7 +63,7 @@ class AlbumFull extends BaseComponent {
         <h3>Album:</h3>
 
         <div class="album-info">
-          <img class="album-info__cover" src="${ this.data.album.cover?.replace('/app/src/music', '/music') || '' }">
+          <img class="album-info__cover" src="${ this.data.album.cover?.replace('/app/src/music', '/music') || '' }" onerror="this.onerror=null;this.src='/img/album.png';">
 
           <p class="album-info__name">
             <svg class="icon"><use href="/img/sprite.svg#icon-disc"></use></svg>

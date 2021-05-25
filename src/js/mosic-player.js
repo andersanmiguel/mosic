@@ -15,19 +15,34 @@ class MosicPlayer extends BaseComponent {
     this.visible = true;
   }
 
+  songChanged() {
+    this.ready = true;
+    this.data._song = this.queue.currentSong;
+  }
+
+  async addToCache() {
+    const connection = navigator.connection;
+    if (connection && connection.type == 'wifi' || window.apiRoute == 'http://192.168.1.37:5554/graphql') {
+      const cache = await caches.open('music-v1');
+      const item = await cache.match(this.data._url.replace('/app/src/music', '/music'))
+      if (!item) {
+        await cache.add(this.data._url.replace('/app/src/music', '/music'));
+      }
+    }
+  }
+
   addBindings() {
     if (this.queue.currentSong) {
       this.ready = true;
       this.data._song = this.queue.currentSong;
     } else {
-      this.queue.on('song-added', _ => {
-        this.ready = true;
-        this.data._song = this.queue.currentSong;
-      });
-      this.queue.on('song-changed', _ => {
-        this.ready = true;
-        this.data._song = this.queue.currentSong || [];
-      });
+      this.queue.on('song-added', this.songChanged.bind(this));
+      this.queue.on('song-changed', this.songChanged.bind(this));
+      // this.queue.on('song-changed', _ => {
+      //   console.log(this.queue.currentSong);
+      //   this.ready = true;
+      //   this.data._song = this.queue.currentSong || [];
+      // });
     }
 
     this.querySelector('.mini-player__play').addEventListener('click', _ => {
@@ -98,6 +113,11 @@ class MosicPlayer extends BaseComponent {
       window.queueMicrotask(async _ => {
         this.data._status ? await this.player.pause() : await this.player.play();
         this.data._status = this.player.paused;
+
+        var t0 = performance.now();
+        await this.addToCache();
+        var t1 = performance.now();
+        console.log("La llamada a hacerAlgo tardó " + (t1 - t0) + " milisegundos.");
       });
 
       if ('mediaSession' in navigator) {

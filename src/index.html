@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
     <meta name="theme-color" content="#d8dee9">
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="/manifest.json">
     <title>Mosic</title>
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@300&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@300;700&display=swap" rel="stylesheet"> 
 
     <link rel="stylesheet" href="/css/styles.css">
 
@@ -72,6 +72,18 @@
       customElements.define('test-test', TestTest);
 
 
+      const sw = true;
+      if ('serviceWorker' in navigator && sw) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/sw.js').then(function(registration) {
+            // Registration was successful
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+          }, function(err) {
+            // registration failed :(
+            console.log('ServiceWorker registration failed: ', err);
+          });
+        });
+      }
     </script>
 
   </body>

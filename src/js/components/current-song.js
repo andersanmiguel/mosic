@@ -6,7 +6,7 @@ class CurrentSong extends BaseComponent {
     return `
       <div class="album-info">
 
-        <img class="album-info__cover" src="${ this.data.cover?.replace('/app/src/music', '/music') || '' }">
+        <img class="album-info__cover" src="${ this.data.cover?.replace('/app/src/music', '/music') || '' }"  onerror="this.onerror=null;this.src='/img/album.png';">
         <p>
           <svg class="icon"><use xlink:href="/img/sprite.svg#icon-music"></use></svg>
           ${ this.data.title }

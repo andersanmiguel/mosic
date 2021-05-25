@@ -19,7 +19,7 @@ class AlbumItem extends BaseComponent {
 
       <div class="album-info" data-mosic-link data-target="/album/${id}">
         <a class="album-info__cover" href="/album/${id}">
-          <img loading="lazy" width="80" height="80" src="${cover}">
+          <img loading="lazy" width="80" height="80" src="${cover}" onerror="this.onerror=null;this.src='/img/album.png';">
         </a>
 
         <p class="album-info__name">
